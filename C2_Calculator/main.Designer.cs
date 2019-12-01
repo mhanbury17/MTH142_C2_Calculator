@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.drag_bar = new System.Windows.Forms.Panel();
+            this.exit_app = new System.Windows.Forms.Button();
             this.title = new System.Windows.Forms.Label();
             this.input_box = new System.Windows.Forms.RichTextBox();
             this.trigModeLbl = new System.Windows.Forms.Label();
@@ -64,7 +65,7 @@
             this.nthPower_btn = new System.Windows.Forms.Button();
             this.rPar_btn = new System.Windows.Forms.Button();
             this.lPar_btn = new System.Windows.Forms.Button();
-            this.button17 = new System.Windows.Forms.Button();
+            this.infinity_btn = new System.Windows.Forms.Button();
             this.button16 = new System.Windows.Forms.Button();
             this.button15 = new System.Windows.Forms.Button();
             this.indef_int_btn = new System.Windows.Forms.Button();
@@ -81,7 +82,6 @@
             this.tangent = new System.Windows.Forms.Button();
             this.cosine = new System.Windows.Forms.Button();
             this.sine = new System.Windows.Forms.Button();
-            this.exit_app = new System.Windows.Forms.Button();
             this.drag_bar.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -95,6 +95,24 @@
             this.drag_bar.TabIndex = 0;
             this.drag_bar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Drag_bar_MouseDown);
             this.drag_bar.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Drag_bar_MouseMove);
+            // 
+            // exit_app
+            // 
+            this.exit_app.BackColor = System.Drawing.Color.Transparent;
+            this.exit_app.BackgroundImage = global::C2_Calculator.Properties.Resources.steelblue_ext;
+            this.exit_app.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.exit_app.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.exit_app.FlatAppearance.BorderSize = 0;
+            this.exit_app.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.exit_app.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.exit_app.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.exit_app.Location = new System.Drawing.Point(720, 12);
+            this.exit_app.Margin = new System.Windows.Forms.Padding(2);
+            this.exit_app.Name = "exit_app";
+            this.exit_app.Size = new System.Drawing.Size(15, 16);
+            this.exit_app.TabIndex = 1;
+            this.exit_app.UseVisualStyleBackColor = false;
+            this.exit_app.Click += new System.EventHandler(this.Exit_app_Click);
             // 
             // title
             // 
@@ -482,13 +500,13 @@
             // mode
             // 
             this.mode.BackColor = System.Drawing.Color.Transparent;
-            this.mode.BackgroundImage = global::C2_Calculator.Properties.Resources.light_btn;
+            this.mode.BackgroundImage = global::C2_Calculator.Properties.Resources.dark_btn;
             this.mode.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.mode.FlatAppearance.BorderSize = 0;
             this.mode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.mode.Font = new System.Drawing.Font("Ebrima", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mode.ForeColor = System.Drawing.Color.White;
-            this.mode.Location = new System.Drawing.Point(134, 263);
+            this.mode.Location = new System.Drawing.Point(12, 263);
             this.mode.Name = "mode";
             this.mode.Size = new System.Drawing.Size(55, 53);
             this.mode.TabIndex = 55;
@@ -666,20 +684,22 @@
             this.lPar_btn.UseVisualStyleBackColor = false;
             this.lPar_btn.Click += new System.EventHandler(this.LPar_btn_Click);
             // 
-            // button17
+            // infinity_btn
             // 
-            this.button17.BackColor = System.Drawing.Color.Transparent;
-            this.button17.BackgroundImage = global::C2_Calculator.Properties.Resources.dark_btn;
-            this.button17.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button17.FlatAppearance.BorderSize = 0;
-            this.button17.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button17.Font = new System.Drawing.Font("Ebrima", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button17.ForeColor = System.Drawing.Color.White;
-            this.button17.Location = new System.Drawing.Point(12, 381);
-            this.button17.Name = "button17";
-            this.button17.Size = new System.Drawing.Size(55, 53);
-            this.button17.TabIndex = 19;
-            this.button17.UseVisualStyleBackColor = false;
+            this.infinity_btn.BackColor = System.Drawing.Color.Transparent;
+            this.infinity_btn.BackgroundImage = global::C2_Calculator.Properties.Resources.light_btn;
+            this.infinity_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.infinity_btn.FlatAppearance.BorderSize = 0;
+            this.infinity_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.infinity_btn.Font = new System.Drawing.Font("Ebrima", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.infinity_btn.ForeColor = System.Drawing.Color.White;
+            this.infinity_btn.Location = new System.Drawing.Point(134, 263);
+            this.infinity_btn.Name = "infinity_btn";
+            this.infinity_btn.Size = new System.Drawing.Size(55, 53);
+            this.infinity_btn.TabIndex = 19;
+            this.infinity_btn.Text = "∞";
+            this.infinity_btn.UseVisualStyleBackColor = false;
+            this.infinity_btn.Click += new System.EventHandler(this.Infinity_btn_Click);
             // 
             // button16
             // 
@@ -705,7 +725,7 @@
             this.button15.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button15.Font = new System.Drawing.Font("Ebrima", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button15.ForeColor = System.Drawing.Color.White;
-            this.button15.Location = new System.Drawing.Point(12, 263);
+            this.button15.Location = new System.Drawing.Point(12, 381);
             this.button15.Name = "button15";
             this.button15.Size = new System.Drawing.Size(55, 53);
             this.button15.TabIndex = 17;
@@ -769,7 +789,7 @@
             this.clear_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.clear_btn.FlatAppearance.BorderSize = 0;
             this.clear_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.clear_btn.Font = new System.Drawing.Font("Ebrima", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.clear_btn.Font = new System.Drawing.Font("Ebrima", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clear_btn.ForeColor = System.Drawing.Color.White;
             this.clear_btn.Location = new System.Drawing.Point(622, 234);
             this.clear_btn.Name = "clear_btn";
@@ -786,7 +806,7 @@
             this.del_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.del_btn.FlatAppearance.BorderSize = 0;
             this.del_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.del_btn.Font = new System.Drawing.Font("Ebrima", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.del_btn.Font = new System.Drawing.Font("Ebrima", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.del_btn.ForeColor = System.Drawing.Color.White;
             this.del_btn.Location = new System.Drawing.Point(561, 234);
             this.del_btn.Name = "del_btn";
@@ -803,7 +823,7 @@
             this.lim_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.lim_btn.FlatAppearance.BorderSize = 0;
             this.lim_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.lim_btn.Font = new System.Drawing.Font("Ebrima", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lim_btn.Font = new System.Drawing.Font("Ebrima", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lim_btn.ForeColor = System.Drawing.Color.White;
             this.lim_btn.Location = new System.Drawing.Point(500, 234);
             this.lim_btn.Name = "lim_btn";
@@ -820,7 +840,7 @@
             this.log_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.log_btn.FlatAppearance.BorderSize = 0;
             this.log_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.log_btn.Font = new System.Drawing.Font("Ebrima", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.log_btn.Font = new System.Drawing.Font("Ebrima", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.log_btn.ForeColor = System.Drawing.Color.White;
             this.log_btn.Location = new System.Drawing.Point(439, 234);
             this.log_btn.Name = "log_btn";
@@ -837,7 +857,7 @@
             this.ln_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ln_btn.FlatAppearance.BorderSize = 0;
             this.ln_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ln_btn.Font = new System.Drawing.Font("Ebrima", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ln_btn.Font = new System.Drawing.Font("Ebrima", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ln_btn.ForeColor = System.Drawing.Color.White;
             this.ln_btn.Location = new System.Drawing.Point(378, 234);
             this.ln_btn.Name = "ln_btn";
@@ -854,7 +874,7 @@
             this.cotangent.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.cotangent.FlatAppearance.BorderSize = 0;
             this.cotangent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cotangent.Font = new System.Drawing.Font("Ebrima", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cotangent.Font = new System.Drawing.Font("Ebrima", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cotangent.ForeColor = System.Drawing.Color.White;
             this.cotangent.Location = new System.Drawing.Point(317, 234);
             this.cotangent.Name = "cotangent";
@@ -871,7 +891,7 @@
             this.secant.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.secant.FlatAppearance.BorderSize = 0;
             this.secant.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.secant.Font = new System.Drawing.Font("Ebrima", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.secant.Font = new System.Drawing.Font("Ebrima", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.secant.ForeColor = System.Drawing.Color.White;
             this.secant.Location = new System.Drawing.Point(256, 234);
             this.secant.Name = "secant";
@@ -888,7 +908,7 @@
             this.cosecant.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.cosecant.FlatAppearance.BorderSize = 0;
             this.cosecant.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cosecant.Font = new System.Drawing.Font("Ebrima", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cosecant.Font = new System.Drawing.Font("Ebrima", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cosecant.ForeColor = System.Drawing.Color.White;
             this.cosecant.Location = new System.Drawing.Point(195, 234);
             this.cosecant.Name = "cosecant";
@@ -905,7 +925,7 @@
             this.tangent.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.tangent.FlatAppearance.BorderSize = 0;
             this.tangent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.tangent.Font = new System.Drawing.Font("Ebrima", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tangent.Font = new System.Drawing.Font("Ebrima", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tangent.ForeColor = System.Drawing.Color.White;
             this.tangent.Location = new System.Drawing.Point(134, 234);
             this.tangent.Name = "tangent";
@@ -922,7 +942,7 @@
             this.cosine.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.cosine.FlatAppearance.BorderSize = 0;
             this.cosine.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cosine.Font = new System.Drawing.Font("Ebrima", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cosine.Font = new System.Drawing.Font("Ebrima", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cosine.ForeColor = System.Drawing.Color.White;
             this.cosine.Location = new System.Drawing.Point(73, 234);
             this.cosine.Name = "cosine";
@@ -939,7 +959,7 @@
             this.sine.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.sine.FlatAppearance.BorderSize = 0;
             this.sine.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.sine.Font = new System.Drawing.Font("Ebrima", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.sine.Font = new System.Drawing.Font("Ebrima", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sine.ForeColor = System.Drawing.Color.White;
             this.sine.Location = new System.Drawing.Point(12, 234);
             this.sine.Name = "sine";
@@ -948,24 +968,6 @@
             this.sine.Text = "sin";
             this.sine.UseVisualStyleBackColor = false;
             this.sine.Click += new System.EventHandler(this.Sine_Click);
-            // 
-            // exit_app
-            // 
-            this.exit_app.BackColor = System.Drawing.Color.Transparent;
-            this.exit_app.BackgroundImage = global::C2_Calculator.Properties.Resources.steelblue_ext;
-            this.exit_app.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.exit_app.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.exit_app.FlatAppearance.BorderSize = 0;
-            this.exit_app.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.exit_app.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.exit_app.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.exit_app.Location = new System.Drawing.Point(720, 12);
-            this.exit_app.Margin = new System.Windows.Forms.Padding(2);
-            this.exit_app.Name = "exit_app";
-            this.exit_app.Size = new System.Drawing.Size(15, 16);
-            this.exit_app.TabIndex = 1;
-            this.exit_app.UseVisualStyleBackColor = false;
-            this.exit_app.Click += new System.EventHandler(this.Exit_app_Click);
             // 
             // mainForm
             // 
@@ -1007,7 +1009,7 @@
             this.Controls.Add(this.nthPower_btn);
             this.Controls.Add(this.rPar_btn);
             this.Controls.Add(this.lPar_btn);
-            this.Controls.Add(this.button17);
+            this.Controls.Add(this.infinity_btn);
             this.Controls.Add(this.button16);
             this.Controls.Add(this.button15);
             this.Controls.Add(this.indef_int_btn);
@@ -1057,7 +1059,7 @@
         private System.Windows.Forms.Button indef_int_btn;
         private System.Windows.Forms.Button button15;
         private System.Windows.Forms.Button button16;
-        private System.Windows.Forms.Button button17;
+        private System.Windows.Forms.Button infinity_btn;
         private System.Windows.Forms.Button dot_btn;
         private System.Windows.Forms.Button rCaret;
         private System.Windows.Forms.Button lcaret;

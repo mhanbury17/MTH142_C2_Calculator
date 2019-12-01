@@ -118,13 +118,23 @@ namespace C2_Calculator
             }
             else if (trigModeLbl.Text == "* hyperbolic selected")
             {
-                trigModeLbl.Text = "* inverse selected";
-                sine.Text = "arcsin";
-                cosine.Text = "arccos";
-                tangent.Text = "arctan";
-                cosecant.Text = "arccsc";
-                secant.Text = "arcsec";
-                cotangent.Text = "arccot";
+                trigModeLbl.Text = "* inverse hyperbolic selected";
+                sine.Text = "arcsinh";
+                cosine.Text = "arccosh";
+                tangent.Text = "arctanh";
+                cosecant.Text = "arccsch";
+                secant.Text = "arcsech";
+                cotangent.Text = "arccoth";
+            }
+            else if (trigModeLbl.Text == "* inverse hyperbolic selected")
+            {
+                trigModeLbl.Text = "* hyperbolic selected";
+                sine.Text = "sinh";
+                cosine.Text = "cosh";
+                tangent.Text = "tanh";
+                cosecant.Text = "csch";
+                secant.Text = "sech";
+                cotangent.Text = "coth";
             }
             input_box.Focus();
             input_box.SelectionStart = caret_pos;
@@ -155,13 +165,23 @@ namespace C2_Calculator
             }
             else if (trigModeLbl.Text == "* inverse selected")
             {
-                trigModeLbl.Text = "* hyperbolic selected";
-                sine.Text = "sinh";
-                cosine.Text = "cosh";
-                tangent.Text = "tanh";
-                cosecant.Text = "csch";
-                secant.Text = "sech";
-                cotangent.Text = "coth";
+                trigModeLbl.Text = "* inverse hyperbolic selected";
+                sine.Text = "arcsinh";
+                cosine.Text = "arccosh";
+                tangent.Text = "arctanh";
+                cosecant.Text = "arccsch";
+                secant.Text = "arcsech";
+                cotangent.Text = "arccoth";
+            }
+            else if (trigModeLbl.Text == "* inverse hyperbolic selected")
+            {
+                trigModeLbl.Text = "* inverse selected";
+                sine.Text = "arcsin";
+                cosine.Text = "arccos";
+                tangent.Text = "arctan";
+                cosecant.Text = "arccsc";
+                secant.Text = "arcsec";
+                cotangent.Text = "arccot";
             }
             input_box.Focus();
             input_box.SelectionStart = caret_pos;
@@ -188,6 +208,16 @@ namespace C2_Calculator
         {
             int caret_pos = input_box.SelectionStart;
             string insertText = "e";
+            int selectionIndex = input_box.SelectionStart;
+            input_box.Text = input_box.Text.Insert(selectionIndex, insertText);
+            input_box.Focus();
+            input_box.SelectionStart = selectionIndex + insertText.Length;
+        }
+
+        private void Infinity_btn_Click(object sender, EventArgs e)
+        {
+            int caret_pos = input_box.SelectionStart;
+            string insertText = "∞";
             int selectionIndex = input_box.SelectionStart;
             input_box.Text = input_box.Text.Insert(selectionIndex, insertText);
             input_box.Focus();
@@ -237,7 +267,7 @@ namespace C2_Calculator
         private void Sqrt_btn_Click(object sender, EventArgs e)
         {
             int caret_pos = input_box.SelectionStart;
-            string insertText = "√()";
+            string insertText = "{2}√()";
             int selectionIndex = input_box.SelectionStart;
             input_box.Text = input_box.Text.Insert(selectionIndex, insertText);
             input_box.Focus();
@@ -531,7 +561,7 @@ namespace C2_Calculator
         private void Indef_int_btn_Click(object sender, EventArgs e)
         {
             int caret_pos = input_box.SelectionStart;
-            string insertText = "∫[]";
+            string insertText = "∫{a}{b}[]";
             int selectionIndex = input_box.SelectionStart;
             input_box.Text = input_box.Text.Insert(selectionIndex, insertText);
             input_box.Focus();
@@ -541,11 +571,11 @@ namespace C2_Calculator
         private void Def_integral_btn_Click(object sender, EventArgs e)
         {
             int caret_pos = input_box.SelectionStart;
-            string insertText = "∫{a}{b}[]";
+            string insertText = "∫{}{}[]";
             int selectionIndex = input_box.SelectionStart;
             input_box.Text = input_box.Text.Insert(selectionIndex, insertText);
             input_box.Focus();
-            input_box.SelectionStart = selectionIndex + insertText.Length - 1;
+            input_box.SelectionStart = selectionIndex + insertText.Length - 5;
         }
 
         private void Derivative_btn_Click(object sender, EventArgs e)
@@ -723,341 +753,351 @@ namespace C2_Calculator
 
         private void solveProblem()
         {
-            string answer = readProblem(0, input_box.Text.Length);
+            string problem = input_box.Text;
+            SolveForNumber(problem);
         }
 
-        private string readProblem(int start, int readLength)
+        //
+        // 1. select operand until an operation
+        // 2. if that operation is multiplication via paranthesis, send stuff inside paranthesis back to the same function to be simplified
+        // 3. add operands and operations to list
+        // 4. if operand has a root, simplify stuff under the root first then take the root using math.power of the func to the 1/n then add that operand to the list as a double.tostring
+        // 5. if operand is a trig function determine if in radians or degrees then simplify stuff inside paranthesis and then run the func and add that to the list as a double.tostring
+        // 6. if operand has a power, execute and then add it to the list of operands
+        // 7. if a subtraction operation is followed by a negative value make it positive
+        // 8. if a value is wrapped in absolute values, send the stuff inside the absolute values back through the function to simplify then make it positive if it is not already
+        // 
+        // be cautious of paranthesis
+        // be cautious of sin^(2)(x)
+        // 
+        //
+
+        private void SolveForNumber(string text)
         {
-            string problem = input_box.Text, tempStr = null, solution = null, operation;
-            int LH = 0, RH = 1;
-            int a = 0, b = 0;
-            int lBracCount = 0, rBracCount = 0;
-            bool isNumeric = true, integrated = false;
-            int operand1 = 0, operand2 = 0;
 
-            if (problem.Substring(LH, 1) == "∫")
+            #region TrigArrays
+
+            //
+            // array containing different trig funcs
+            //
+
+            string[] trigFuncs = new string[24];
+            trigFuncs[0] = "sin(u)";
+            trigFuncs[1] = "cos(u)";
+            trigFuncs[2] = "tan(u)";
+            trigFuncs[3] = "csc(u)";
+            trigFuncs[4] = "sec(u)";
+            trigFuncs[5] = "cot(u)";
+            trigFuncs[6] = "sinh(u)";
+            trigFuncs[7] = "cosh(u)";
+            trigFuncs[8] = "tanh(u)";
+            trigFuncs[9] = "csch(u)";
+            trigFuncs[10] = "sech(u)";
+            trigFuncs[11] = "coth(u)";
+            trigFuncs[12] = "arcsin(u)";
+            trigFuncs[13] = "arccos(u)";
+            trigFuncs[14] = "arctan(u)";
+            trigFuncs[15] = "arccsc(u)";
+            trigFuncs[16] = "arcsec(u)";
+            trigFuncs[17] = "arccot(u)";
+            trigFuncs[18] = "arcsinh(u)";
+            trigFuncs[19] = "arccosh(u)";
+            trigFuncs[20] = "arctanh(u)";
+            trigFuncs[21] = "arccsch(u)";
+            trigFuncs[22] = "arcsech(u)";
+            trigFuncs[23] = "arccoth(u)";
+
+            //
+            // array containing parent derivatives for trig funcs
+            //
+
+            string[] trigFuncsDerivatives = new string[24];
+            trigFuncs[0] = "cos(u)";
+            trigFuncs[1] = "-sin(u)";
+            trigFuncs[2] = "sec^(2)(u)";
+            trigFuncs[3] = "-csc(u)cot(u)";
+            trigFuncs[4] = "sec(u)tan(u)";
+            trigFuncs[5] = "-csc^(2)(u)";
+            trigFuncs[6] = "cosh(u)";
+            trigFuncs[7] = "sinh(u)";
+            trigFuncs[8] = "sech^(2)(u)";
+            trigFuncs[9] = "-coth(u)csch(u)";
+            trigFuncs[10] = "sech(u)tanh(u)";
+            trigFuncs[11] = "-csch^(2)(u)";
+            trigFuncs[12] = "(1/{2}√(1-u^(2)))";
+            trigFuncs[13] = "-(1/{2}√(1-u^(2)))";
+            trigFuncs[14] = "(1/(1+u^(2)))";
+            trigFuncs[15] = "-(1/(u{2}√(u^(2)-1)))";
+            trigFuncs[16] = "(1/(u{2}√(u^(2)-1)))";
+            trigFuncs[17] = "-(1/(1+u^(2)))";
+            trigFuncs[18] = "(1/{2}√(u^(2)+1))";
+            trigFuncs[19] = "(1/{2}√(u^(2)-1))";
+            trigFuncs[20] = "(1/(1-u^(2)))";
+            trigFuncs[21] = "-(1/|u|{2}√(1-u^(2)))";
+            trigFuncs[22] = "-(1/u{2}√(1-u^(2)))";
+            trigFuncs[23] = "(1/(1-u^(2)))";
+
+            //
+            // array containing parent integrals for trig funcs
+            //
+
+            string[] trigFuncsIntegrals = new string[24];
+            trigFuncs[0] = "-cos(u)";
+            trigFuncs[1] = "sin(u)";
+            trigFuncs[2] = "ln|sec(u)|";
+            trigFuncs[3] = "ln|csc(u)-cot(u)|";
+            trigFuncs[4] = "ln|sec(u)+tan(u)|";
+            trigFuncs[5] = "ln|sin(u)|";
+            trigFuncs[6] = "cosh(u)";
+            trigFuncs[7] = "sinh(u)";
+            trigFuncs[8] = "ln|cosh(u)|";
+            trigFuncs[9] = "N";
+            trigFuncs[10] = "N";
+            trigFuncs[11] = "N";
+            trigFuncs[12] = "N";
+            trigFuncs[13] = "N";
+            trigFuncs[14] = "N";
+            trigFuncs[15] = "N";
+            trigFuncs[16] = "N";
+            trigFuncs[17] = "N";
+            trigFuncs[18] = "N";
+            trigFuncs[19] = "N";
+            trigFuncs[20] = "N";
+            trigFuncs[21] = "N";
+            trigFuncs[22] = "N";
+            trigFuncs[23] = "N";
+
+
+            #endregion
+
+            List<string> operands = new List<string>();
+            List<string> operations = new List<string>();
+
+            bool atEnd = false;
+
+            //
+            // when select operand returns an operand use operand.contains to check if the operand has been fully simplified or if there is an integral in there that needs to be taken care of
+            //
+            // all select operand should do is just highlight and copy the piece to be simplified like 3^(2) verses 9
+            //
+
+            selectOperand(text);
+
+            //
+            // get operation between operands just checks hey if this is a paranthesis im gonna leave it but the operation is multiplication or if the operation is addition im gonna remove it
+            // and then move on to another operand and if there is no operation then im not taking anything and returning "null"
+            //
+
+            //
+            // once returned subtract that operand from the list then send to another function where it will simplify/solve operands in the list until can no longer be simplified
+            //
+
+
+            //do
+            //{
+            //    if (text != "")
+            //    {
+            //        operands.Add(selectOperand(text));
+            //        if (operand > 0)
+            //        {
+            //            text = text.Remove(0, operandLength);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        atEnd = true;
+            //    }
+            //    //operations.Add(selectOperation(text));
+                
+
+
+            //} while (!atEnd);
+
+            //if (operands.Count == 1)
+            //{
+            //    input_box.Text = operands[0];
+            //}
+            
+        }
+
+        //
+        // returns a piece of the problem
+        //
+
+        private string selectOperand(string text)
+        {
+            string operand = null, unknown = null;
+            int distance = 0 , vdis = 0;
+            
+
+            if (text.Substring(0, 1).All(char.IsNumber) || text.Substring(0, 1).All(char.IsDigit))
             {
-                LH++;
-                // identifies string as definite integral
-                if (problem.Substring(LH, 1) == "{")
+                for (int i = 0; i < text.Length; i++)
                 {
-                    LH++;
-                    RH = 1;
-                    do
+                    if (text.Substring(i, 1).All(char.IsNumber) || text.Substring(i, 1).All(char.IsDigit))
                     {
-                        if (problem.Substring(LH, RH).All(char.IsNumber))
-                        {
-                            RH++;
-                            isNumeric = true;
-                        }
-                        else
-                        {
-                            isNumeric = false;
-                        }
-                    } while (isNumeric);
-                    a = int.Parse(problem.Substring(LH, RH - 1));
-
-                    LH = LH + RH + 1;
-                    RH = 1;
-                    do
+                        operand = text.Substring(0, i + 1);
+                    }
+                    else if (text.Substring(i, 1) == "^")
                     {
-                        if (problem.Substring(LH, RH).All(char.IsNumber))
+                        for (int p = 0; p < text.Length; p++)
                         {
-                            RH++;
-                            isNumeric = true;
-                        }
-                        else
-                        {
-                            isNumeric = false;
-                        }
-                    } while (isNumeric);
-                    b = int.Parse(problem.Substring(LH, RH - 1));
-
-                    LH = LH + RH + 1;
-                    do
-                    {
-                        if (problem.Substring(LH, 1) == "∫")
-                        {
-                            //
-                            // handler if there is an integral inside of an integral
-                            //
-
-                            lBracCount++;
-                            for (int d = 0; d < problem.Length - LH; d++)
+                            if (i + distance + (3 * p) < text.Length)
                             {
-                                if (problem.Substring(d + LH, 1) == "[")
+                                if (text.Substring(i + distance + (3 * p), 1) == "^")
                                 {
-                                    lBracCount++;
+                                    distance = distance + lengthBetween(i + distance + (3 * p) + 1, text, "(", ")");
                                 }
-                                else if (problem.Substring(d + LH, 1) == "]")
+                                else
                                 {
-                                    rBracCount++;
-                                }
-
-                                if (rBracCount == lBracCount && lBracCount > 1)
-                                {
-                                    RH = d + LH;
-                                    d = problem.Length;
+                                    distance = distance + 3 * p;
+                                    p = text.Length;
                                 }
                             }
-
-                            //
-                            // returns simplification to everything inside of the brackets before integrating
-                            //
-
-                            tempStr = readProblem(LH - 1, RH);
-
-                            //
-                            // perform integration of inside stuff
-                            //
-
-                        }
-                        else if (problem.Substring(LH, 1) == "ƒ")
-                        {
-                            //
-                            // handler for if there is a derivative inside of a definite integral
-                            //
-                        }
-                        else
-                        {
-                            //
-                            // integrate text
-                            //
-
-                            //
-                            // remember to check end points for integration
-                            //
-                        }
-
-                    } while (!integrated);
-
-                }
-                // identifies the string as an indefinite integral
-                else if (problem.Substring(LH, 1) == "[")
-                {
-                    LH++;
-                    do
-                    {
-                        if (problem.Substring(LH, 1) == "∫")
-                        {
-                            //
-                            // handler if there is an integral inside of an integral
-                            //
-
-                            lBracCount++;
-                            for (int d = 0; d < problem.Length - LH; d++)
+                            else
                             {
-                                if (problem.Substring(d + LH, 1) == "[")
-                                {
-                                    lBracCount++;
-                                }
-                                else if (problem.Substring(d + LH, 1) == "]")
-                                {
-                                    rBracCount++;
-                                }
-
-                                if (rBracCount == lBracCount && lBracCount > 1)
-                                {
-                                    RH = d + LH;
-                                    d = problem.Length;
-                                }
+                                distance = distance + 3 * p;
+                                p = text.Length;
                             }
-
-                            //
-                            // returns simplification to everything inside of the brackets before integrating
-                            //
-
-                            tempStr = readProblem(LH - 1, RH);
-
-                            //
-                            // perform integration of inside stuff
-                            //
-
-                        }
-                        else if (problem.Substring(LH, 1) == "ƒ")
-                        {
-                            //
-                            // handler for if there is a derivative inside of a definite integral
-                            //
-                        }
-                        else
-                        {
-                            //
-                            // integrate text
-                            //
-
-                            //
-                            // remember to check endpoints for integration
-                            //
                         }
 
-                    } while (!integrated);
-
-                }
-                else
-                {
-                    //
-                    // ERROR: USER SHOULD NOT GET HERE
-                    //
-                }
-            }
-            else if (problem.Substring(LH, 1).All(char.IsNumber) || problem.Substring(LH, 1).All(char.IsDigit) || problem.Substring(LH, 1) == ".")
-            {
-                //
-                // keep special attention to the '.'
-                //
-
-                RH = 1;
-                do
-                {
-                    if (problem.Substring(LH, RH).All(char.IsNumber))
-                    {
-                        RH++;
-                        isNumeric = true;
+                        operand = text.Substring(0, i + distance);
+                        i = text.Length;
                     }
                     else
                     {
-                        isNumeric = false;
+                        operand = text.Substring(0, i);
+                        i = text.Length;
                     }
-                } while (isNumeric);
-                operand1 = int.Parse(problem.Substring(LH, RH - 1));
-
-                LH = RH - 1;
-
-                //
-                // get operation to perform on operand1
-                //
-
-                RH = 1;
-                if (problem.Substring(LH, RH) == "+")
-                {
-                    operation = "+";
-                    LH++;
                 }
-                else if (problem.Substring(LH, RH) == "-")
+            }
+            else if (text.Substring(0, 1).All(char.IsLetter)) // Handler if there are letters in the text, such as ln, trig, or limits
+            {
+                for (int i = 0; i < text.Length; i++)
                 {
-                    operation = "-";
-                    LH++;
+                    if (text.Substring(i, 1).All(char.IsLetter))
+                    {
+                        unknown = text.Substring(0, i + 1);
+                    }
+                    else if (text.Substring(i, 1) == "^")
+                    {
+                        for (int p = 0; p < text.Length; p++)
+                        {
+                            if (i + distance + (3 * p) < text.Length)
+                            {
+                                if (text.Substring(i + distance + (3 * p), 1) == "^")
+                                {
+                                    distance = distance + lengthBetween(i + distance + (3 * p) + 1, text, "(", ")");
+                                }
+                                else
+                                {
+                                    distance = distance + 3 * p;
+                                    p = text.Length;
+                                }
+                            }
+                            else
+                            {
+                                distance = distance + 3 * p;
+                                p = text.Length;
+                            }
+                        }
+                        if (unknown.Contains("x"))
+                        {
+                            operand = text.Substring(0, i + distance);
+                        }
+                        else // handles trig functions with powers
+                        {
+                            distance = distance + lengthBetween(i + distance, text, "(", ")");
+                            operand = text.Substring(0, i + distance + 2);
+                        }
+                        i = text.Length;
+                    }
+                    else if (text.Substring(i, 1) == "(") ////////////////////////////////////////// for quantity operand
+                    {
+                        vdis = lengthBetween(i, text, "(", ")");
+
+                        if (text.Substring(i + vdis + 2, 1) == "^")
+                        {
+                            for (int p = 0; p < text.Length; p++)
+                            {
+                                if (i + vdis + distance + 2 + (3 * p) < text.Length)
+                                {
+                                    if (text.Substring(i + vdis + 2 + distance + (3 * p), 1) == "^")
+                                    {
+                                        distance = distance + lengthBetween(i + vdis + 2 + distance + (3 * p) + 1, text, "(", ")");
+                                    }
+                                    else
+                                    {
+                                        distance = distance + 3 * p;
+                                        p = text.Length;
+                                    }
+                                }
+                                else
+                                {
+                                    distance = distance + 3 * p;
+                                    p = text.Length;
+                                }
+                            }
+
+                            operand = text.Substring(0, i + vdis + distance + 2);
+                            i = text.Length;
+                        }
+                        else
+                        {
+                            operand = text.Substring(0, i + distance + 2);
+                            i = text.Length;
+                        }
+                    }
+                    else if (text.Substring(i, 1) == "{") /////////////////////////////////////////////////////// handler for limits and logs
+                    {
+                        distance = lengthBetween(i, text, "{", "}");
+                        if ()
+                        {
+
+                        }
+
+                        operand = text.Substring(0, i + distance);
+                        i = text.Length;
+                    }
+                    else
+                    {
+                        unknown = text.Substring(0, i);
+                        i = text.Length;
+                    }
                 }
-                else if (problem.Substring(LH, RH) == "*")
-                {
-                    operation = "*";
-                    LH++;
-                }
-                else if (problem.Substring(LH, RH) == "/")
-                {
-                    operation = "/";
-                    LH++;
-                }
-                else if (problem.Substring(LH, RH) == "^")
-                {
-                    operation = "^";
-                    LH++;
-                }
-                else if (problem.Substring(LH, RH) == "(" || problem.Substring(LH, RH) == "{" || problem.Substring(LH, RH).All(char.IsLetter) || problem.Substring(LH, RH) == "ƒ" || problem.Substring(LH, RH) == "∫" || problem.Substring(LH, RH) == "√")
-                {
-                    operation = "*";
-                    //
-                    // figure out what you're multiplying by from operand2
-                    //
-                }
-                else if (problem.Substring(LH, RH) == ")" || problem.Substring(LH, RH) == "]")
-                {
-                    //
-                    // no operation should occur here
-                    //
-                    operation = "N";
-                }
-                else
-                {
-                    //
-                    // ERROR: USER SHOULD NOT GET HERE
-                    //
-                }
-
-
-                //
-                // get operand2
-                //
-
-                //
-                //
-                //
-                //
-                // get stopping point for operand2
-                //
-                // if operand2 is not a simple calculation resend to read to be simplified
-                //
-                //
-
-                if (problem.Substring(LH, RH) == ")")
-                {
-
-                }
-
-
-                tempStr = readProblem(LH, RH);
-                
-            }
-            else if (problem.Substring(LH, 1).All(char.IsLetter))
-            {
-                //
-                // from here grab the whole string until it reaches a paranthesis then compare it to all the ln/log/trig stuff remember the limit func
-                // dont forget e
-                // also dont forget variables, like if they enter something other than x
-                //
-            }
-            else if (problem.Substring(LH, 1) == "√")
-            {
-
-            }
-            else if (problem.Substring(LH, 1) == "{")
-            {
-                //
-                // for nth root stuff
-                //
-            }
-            else if (problem.Substring(LH, 1) == "π")
-            {
-
-            }
-            else if (problem.Substring(LH, 1) == "^")
-            {
-                //
-                // can handle both ^2 funcs and ^n funcs
-                //
-            }
-            //
-            //
-            // may not need to include operation events
-            //
-            //
-            else if (problem.Substring(LH, 1) == "+")
-            {
-                // addition operation
-            }
-            else if (problem.Substring(LH, 1) == "-")
-            {
-                // subtraction operation
-            }
-            else if (problem.Substring(LH, 1) == "*")
-            {
-                // multiplication operation
-            }
-            else if (problem.Substring(LH, 1) == "/")
-            {
-                // fraction operation
-            }
-            else
-            {
-                //
-                // ERROR: USER SHOULD NOT GET HERE
-                //
             }
 
-
-            return solution;
+            return operand;
         }
+
+        private int lengthBetween(int pos, string text, string lRef, string rRef)
+        {
+            int distance = 0;
+            int lTrack = 0, rTrack = 0;
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (text.Substring(pos + i, 1) == lRef)
+                {
+                    lTrack++;
+                }
+                else if (text.Substring(pos + i, 1) == rRef)
+                {
+                    rTrack++;
+                }
+
+                if (lTrack == rTrack && lTrack > 0)
+                {
+                    distance = i - 1;
+                    //pos = pos + i + 1;
+                    i = text.Length;
+                }
+            }
+
+            return distance;
+        }
+
+        
 
         #endregion
         //
