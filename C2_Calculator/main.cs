@@ -779,104 +779,10 @@ namespace C2_Calculator
 
         private void SolveForNumber(string text)
         {
-
-            #region TrigArrays
-
-            //
-            // array containing different trig funcs
-            //
-
-            string[] trigFuncs = new string[24];
-            trigFuncs[0] = "sin(u)";
-            trigFuncs[1] = "cos(u)";
-            trigFuncs[2] = "tan(u)";
-            trigFuncs[3] = "csc(u)";
-            trigFuncs[4] = "sec(u)";
-            trigFuncs[5] = "cot(u)";
-            trigFuncs[6] = "sinh(u)";
-            trigFuncs[7] = "cosh(u)";
-            trigFuncs[8] = "tanh(u)";
-            trigFuncs[9] = "csch(u)";
-            trigFuncs[10] = "sech(u)";
-            trigFuncs[11] = "coth(u)";
-            trigFuncs[12] = "arcsin(u)";
-            trigFuncs[13] = "arccos(u)";
-            trigFuncs[14] = "arctan(u)";
-            trigFuncs[15] = "arccsc(u)";
-            trigFuncs[16] = "arcsec(u)";
-            trigFuncs[17] = "arccot(u)";
-            trigFuncs[18] = "arcsinh(u)";
-            trigFuncs[19] = "arccosh(u)";
-            trigFuncs[20] = "arctanh(u)";
-            trigFuncs[21] = "arccsch(u)";
-            trigFuncs[22] = "arcsech(u)";
-            trigFuncs[23] = "arccoth(u)";
-
-            //
-            // array containing parent derivatives for trig funcs
-            //
-
-            string[] trigFuncsDerivatives = new string[24];
-            trigFuncs[0] = "cos(u)";
-            trigFuncs[1] = "-sin(u)";
-            trigFuncs[2] = "sec^(2)(u)";
-            trigFuncs[3] = "-csc(u)cot(u)";
-            trigFuncs[4] = "sec(u)tan(u)";
-            trigFuncs[5] = "-csc^(2)(u)";
-            trigFuncs[6] = "cosh(u)";
-            trigFuncs[7] = "sinh(u)";
-            trigFuncs[8] = "sech^(2)(u)";
-            trigFuncs[9] = "-coth(u)csch(u)";
-            trigFuncs[10] = "sech(u)tanh(u)";
-            trigFuncs[11] = "-csch^(2)(u)";
-            trigFuncs[12] = "(1/{2}√(1-u^(2)))";
-            trigFuncs[13] = "-(1/{2}√(1-u^(2)))";
-            trigFuncs[14] = "(1/(1+u^(2)))";
-            trigFuncs[15] = "-(1/(u{2}√(u^(2)-1)))";
-            trigFuncs[16] = "(1/(u{2}√(u^(2)-1)))";
-            trigFuncs[17] = "-(1/(1+u^(2)))";
-            trigFuncs[18] = "(1/{2}√(u^(2)+1))";
-            trigFuncs[19] = "(1/{2}√(u^(2)-1))";
-            trigFuncs[20] = "(1/(1-u^(2)))";
-            trigFuncs[21] = "-(1/|u|{2}√(1-u^(2)))";
-            trigFuncs[22] = "-(1/u{2}√(1-u^(2)))";
-            trigFuncs[23] = "(1/(1-u^(2)))";
-
-            //
-            // array containing parent integrals for trig funcs
-            //
-
-            string[] trigFuncsIntegrals = new string[24];
-            trigFuncs[0] = "-cos(u)";
-            trigFuncs[1] = "sin(u)";
-            trigFuncs[2] = "ln|sec(u)|";
-            trigFuncs[3] = "ln|csc(u)-cot(u)|";
-            trigFuncs[4] = "ln|sec(u)+tan(u)|";
-            trigFuncs[5] = "ln|sin(u)|";
-            trigFuncs[6] = "cosh(u)";
-            trigFuncs[7] = "sinh(u)";
-            trigFuncs[8] = "ln|cosh(u)|";
-            trigFuncs[9] = "N";
-            trigFuncs[10] = "N";
-            trigFuncs[11] = "N";
-            trigFuncs[12] = "N";
-            trigFuncs[13] = "N";
-            trigFuncs[14] = "N";
-            trigFuncs[15] = "N";
-            trigFuncs[16] = "N";
-            trigFuncs[17] = "N";
-            trigFuncs[18] = "N";
-            trigFuncs[19] = "N";
-            trigFuncs[20] = "N";
-            trigFuncs[21] = "N";
-            trigFuncs[22] = "N";
-            trigFuncs[23] = "N";
-
-
-            #endregion
-
             List<string> operands = new List<string>();
             List<string> operations = new List<string>();
+
+
             string operand, operation, answer = "";
             bool atEnd = false;
 
@@ -912,50 +818,13 @@ namespace C2_Calculator
 
             } while (!atEnd);
 
-            foreach (string op in operands)
-            {
-                if (op.Substring(0, 1) == "∫")
-                {
-                    //
-                    // look at operands and operations inside and split them into a seperate list called operandFocus or something like that and then integrate the operands
-                    //
-                }
-                else if (op.Substring(0, 1) == "ƒ")
-                {
-                    //
-                    //
-                    //
-                }
-                else if (op.Substring(0, 1) == "(")
-                {
-                    //
-                    //
-                    //
-                }
-                else if (op.Substring(0, 1) == "{")
-                {
-                    //
-                    //
-                    //
-                }
+            //
+            // break operands into innerOperands and apply math until all operands are in their simplist form
+            //
 
-            }
+            operands = simplifyOperands(operands, operations);
 
-
-
-
-
-
-
-
-
-
-
-
-            if (operands.Count == 1 && operands[0].All(char.IsDigit))
-            {
-                answer = operands[0];
-            }
+            //answer = putSimplifiedOperandsTogether(operands, operations);
 
             input_box.Text = answer;
             //
@@ -968,6 +837,576 @@ namespace C2_Calculator
             //
 
         }
+
+        /*
+        private string putSimplifiedOperandsTogether(List<string> operands, List<string> operations)
+        {
+            string answer = "", problem;
+            int distance = 0, powerDistance = 0;
+            string operand, operation = "N";
+            double operand1 = 0, operand2 = 0, value = 0, power = 0;
+            bool atEnd = false;
+
+            for (int i = 0; i < operands.Count; i++)
+            {
+                atEnd = false;
+                //
+                // this is where to use if contains only numbers and then add them all together
+                //
+                if (containsOnlyNumbers(operands[i]))
+                {
+                    if (operands[i].Substring(0, 1) == "(")
+                    {
+                        distance = lengthBetween(0, operands[i], "(", ")");
+                        problem = operands[i].Substring(1, distance);
+
+                        operand = selectOperand(problem);
+                        operand1 = double.Parse(operand);
+                        problem = problem.Substring(operand.Length);
+                        do
+                        {
+                            if (problem != "")
+                            {
+                                operation = selectOperation(problem);
+                                problem = problem.Substring(operation.Length);
+                                operand = selectOperand(problem);
+                                operand2 = double.Parse(operand);
+                                problem = problem.Substring(operand.Length);
+                                if (problem == "")
+                                {
+                                    atEnd = true;
+                                }
+                            }
+                            else
+                            {
+                                atEnd = true;
+                            }
+                            operand1 = doMath(operand1, operand2, operation);
+                        } while (!atEnd);
+                        if (operands[i].Substring(2 + distance, 1) == "^")
+                        {
+                            value = operand1;
+                            powerDistance = lengthBetween(3 + distance, operands[i], "(", ")");
+                            problem = operands[i].Substring(3 + distance, powerDistance);
+
+                            operand = selectOperand(problem);
+                            operand1 = double.Parse(operand);
+                            problem = problem.Substring(operand.Length);
+                            do
+                            {
+                                if (problem != "")
+                                {
+                                    operation = selectOperation(problem);
+                                    problem = problem.Substring(operation.Length);
+                                    operand = selectOperand(problem);
+                                    operand2 = double.Parse(operand);
+                                    problem = problem.Substring(operand.Length);
+                                    if (problem == "")
+                                    {
+                                        atEnd = true;
+                                    }
+                                }
+                                else
+                                {
+                                    atEnd = true;
+                                }
+                                operand1 = doMath(operand1, operand2, operation);
+                            } while (!atEnd);
+                            power = operand1;
+                            operand1 = doMath(value, power, "^");
+                        }
+                    }
+                    else if (operands[i].Substring(0, 1) == "{")
+                    {
+                        problem = operands[i];
+                        distance = lengthBetween(0, problem, "{", "}");
+                        power = 1 / double.Parse(problem.Substring(1, distance));
+                        value = double.Parse(problem.Substring(4 + distance, lengthBetween(3 + distance, problem, "(", ")")));
+                        operand1 = doMath(value, power, "^");
+                        if (5 + distance + lengthBetween(3 + distance, problem, "(", ")") < problem.Length)
+                        {
+                            if (problem.Substring(5 + distance + lengthBetween(3 + distance, problem, "(", ")"), 1) == "^")
+                            {
+                                powerDistance = lengthBetween(6 + distance + value.ToString().Length, problem, "(", ")");
+                                power = double.Parse(problem.Substring(7 + distance + value.ToString().Length, powerDistance));
+                                operand1 = doMath(operand1, power, "^");
+                            }
+                        }
+                        
+                    }
+                    
+                }
+                else
+                {
+                    answer = answer + operands[i] + operations[i];
+                }
+                if (i < operations.Count)
+                {
+                    answer = answer + operand1.ToString() + operation[i];
+                }
+                else
+                {
+                    answer = answer + operand1.ToString();
+                }
+
+            }
+
+            return answer;
+        }
+        */
+
+        //
+        // returns an answer given two operands and an operator
+        //
+
+        private double doMath(double operand1, double operand2, string operation)
+        {
+            double answer = 0;
+
+            if (operation == "^")
+            {
+                answer = Math.Pow(operand1, operand2);
+            }
+            else if (operation == "+")
+            {
+                answer = operand1 + operand2;
+            }
+            else if (operation == "-")
+            {
+                answer = operand1 - operand2;
+            }
+            else if (operation == "*" || operation == "")
+            {
+                answer = operand1 * operand2;
+            }
+            else if (operation == "/")
+            {
+                answer = operand1 / operand2;
+            }
+
+            return answer;
+        }
+
+        //
+        // checks that a function only contains numbers
+        //
+
+        private bool containsOnlyNumbers(string text)
+        {
+            bool containsOnlyNum = true;
+
+            for (int  i = 0;  i < text.Length;  i++)
+            {
+                if (text.Substring(i, 1) == "x" || text.Substring(i, 1) == "ƒ" || text.Substring(i, 1) == "∫")
+                {
+                    containsOnlyNum = false;
+                    i = text.Length;
+                }
+                
+            }
+
+            return true;
+        }
+
+        private List<string> simplifyOperands(List<string> operands, List<string> operations)
+        {
+            List<string> innerOperands = new List<string>();
+            List<string> innerOperations = new List<string>();
+
+            for (int i = 0; i < operands.Count; i++)
+            {
+                operands[i] = simplifyPiece(operands[i]);
+            }
+
+            return operands;
+        }
+
+        private string simplifyPiece(string operands)
+        {
+            List<string> innerOperands = new List<string>();
+            List<string> innerOperations = new List<string>();
+
+            string piece = null, _a, _b, boundA, boundB, function, power = "", unknown = "", root = "";
+            string innerOperand = "", innerOperation = "";
+            int distance = 0, innerDistance = 0;
+            bool atEnd = false;
+
+            if (operands.Substring(0, 1) == "∫")
+            {
+                //
+                // integrate inside stuff
+                //
+                distance = lengthBetween(1, operands, "{", "}");
+                _a = operands.Substring(2, distance);
+                boundA = simplifyPiece(operands.Substring(2, distance));
+                distance = lengthBetween(3 + distance, operands, "{", "}");
+                _b = operands.Substring(4 + _a.Length, distance);
+                boundB = simplifyPiece(operands.Substring(4 + _a.Length, distance));
+                distance = lengthBetween(5 + _a.Length + _b.Length, operands, "[", "]");
+                function = operands.Substring(5 + _a.Length + _b.Length, distance);
+                piece = integrate(boundA, boundB, function);
+                if (operands.Substring(7 + _a.Length + _b.Length + function.Length, 1) == "^")
+                {
+                    power = simplifyPiece(operands.Substring(7 + _a.Length + _b.Length + function.Length));
+                    piece = "(" + piece + ")" + power;
+                }
+
+            }
+            else if (operands.Substring(0, 1) == "ƒ")
+            {
+                //
+                // derivative of inside stuff
+                //
+                distance = lengthBetween(2, operands, "[", "]");
+                piece = takeDerivative(operands.Substring(3, distance));
+                if (operands.Substring(4 + distance, 1) == "^")
+                {
+                    power  = simplifyPiece(operands.Substring(4 + distance));
+                    piece = "(" + piece + ")" + power;
+                }
+            }
+            else if (operands.Substring(0, 1).All(char.IsLetter))
+            {
+                //
+                // check if its trig or ln or ...
+                // or if its a letter that represents a number such as e or pi
+                //
+                if (operands.Substring(0, 1) == "e" || operands.Substring(0, 1) == "π")
+                {
+                    piece = operands.Substring(0, 1);
+                    // this is just a number so were going to check if theres a power on it and then return it the way we got it
+                    if (operands.Substring(1, 1) == "^")
+                    {
+                        power = simplifyPiece(operands.Substring(1));
+                        piece = "(" + piece + ")" + power;
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < operands.Length; i++)
+                    {
+                        if (operands.Substring(i, 1).All(char.IsLetter))
+                        {
+                            unknown = operands.Substring(0, i + 1);
+                        }
+                        else
+                        {
+                            i = operands.Length;
+                        }
+                    }
+                    if (unknown == "ln")
+                    {
+                        distance = lengthBetween(unknown.Length, operands, "(", ")");
+                        //
+                        // what if there is more than one piece to what is being simplified
+                        //
+                        piece = simplifyPiece(operands.Substring(unknown.Length + 1, distance));
+                        if (operands.Substring(2 + unknown.Length + distance, 1) == "^")
+                        {
+                            power = simplifyPiece(operands.Substring(2 + unknown.Length + distance));
+                            piece = "(" + piece + ")" + power;
+                        }
+                    }
+                    else if (unknown == "log")
+                    {
+                        distance = lengthBetween(unknown.Length, operands, "{", "}");
+                        //
+                        // what if there is more than one piece to what is being simplified
+                        //
+                        piece = simplifyPiece(operands.Substring(unknown.Length + 1, lengthBetween(unknown.Length + distance + 2, operands, "(", ")")));
+                        distance = distance + lengthBetween(unknown.Length + distance + 2, operands, "(", ")");
+                        if (operands.Substring(4 + unknown.Length + distance, 1) == "^")
+                        {
+                            power = simplifyPiece(operands.Substring(4 + unknown.Length + distance));
+                            //
+                            // if there is more than one piece returned into the string then the power only appears to be on the last piece
+                            // so i added the paranthesis to clarify
+                            //
+                            piece = "(" + piece + ")" + power;
+                        }
+                    }
+                    else if (unknown == "lim")
+                    {
+                        distance = lengthBetween(unknown.Length, operands, "{", "}");
+                        distance = distance + lengthBetween(unknown.Length + 2 + distance, operands, "{", "}");
+                        piece = simplifyPiece(operands.Substring(unknown.Length + 1, lengthBetween(unknown.Length + distance + 2, operands, "(", ")")));
+                        distance = distance + lengthBetween(unknown.Length + distance + 2, operands, "(", ")");
+                        if (operands.Substring(4 + unknown.Length + distance, 1) == "^")
+                        {
+                            power = simplifyPiece(operands.Substring(4 + unknown.Length + distance));
+                            piece = "(" + piece + ")" + power;
+                        }
+                    }
+                    else // this will be trig functions
+                    {
+                        distance = 0;
+                        for (int i = 0; i < operands.Length; i++)
+                        {
+                            if (operands.Substring(unknown.Length + distance + 3*i) == "^")
+                            {
+                                distance = distance + lengthBetween(unknown.Length + distance + 3 * i, operands, "(", ")");
+                            }
+                            else if (i > 0)
+                            {
+                                piece = simplifyPiece(operands.Substring(unknown.Length + distance + 3 * i));
+                                power = simplifyPiece(operands.Substring(unknown.Length, distance + 3 * i));
+                                i = operands.Length;
+                            }
+                            else
+                            {
+                                piece = simplifyPiece(operands.Substring(unknown.Length));
+                                i = operands.Length;
+                            }
+                        }
+                        piece = unknown + power + piece;
+                    }
+                    
+                }
+            }
+            else if (operands.Substring(0, 1).All(char.IsNumber) || operands.Substring(0, 1).All(char.IsNumber))
+            {
+                //
+                // this is just a constant and is already in its simple form
+                //
+                piece = operands;
+            }
+            else if (operands.Substring(0, 1) == "{")
+            {
+                //
+                // handler for square roots
+                //
+                distance = lengthBetween(0, operands, "{", "}");
+                root = simplifyPiece(operands.Substring(1, distance));
+                innerDistance = lengthBetween(3 + distance, operands, "(", ")");
+                piece = simplifyPiece(operands.Substring(4 + distance, innerDistance));
+                if (5 + innerDistance + distance < operands.Length)
+                {
+                    if (operands.Substring(5 + innerDistance + distance, 1) == "^")
+                    {
+                        power = simplifyPiece(operands.Substring(5 + innerDistance + distance));
+                    }
+                }
+
+                piece = "{" + root + "}" + "√" + "(" + piece + ")" + power;
+            }
+            else if (operands.Substring(0, 1) == "(")
+            {
+                //
+                // handler for quantities also handles if there are more than one pieces to be simplified inside of a simplifyPiece()
+                //
+                // send to simplifyOperands()?
+                //
+                distance = lengthBetween(0, operands, "(", ")");
+                piece = simplifyPiece(operands.Substring(1, distance));
+
+                do
+                {
+                    innerOperand = selectOperand(piece);
+                    innerOperands.Add(innerOperand);
+                    piece = piece.Substring(innerOperand.Length);
+                    if (piece != "")
+                    {
+                        innerOperation = selectOperation(piece);
+                        innerOperations.Add(innerOperation);
+                        piece = piece.Substring(innerOperation.Length);
+                        if (piece == "")
+                        {
+                            atEnd = true;
+                        }
+                    }
+                    else
+                    {
+                        atEnd = true;
+                    }
+
+                } while (!atEnd);
+
+                innerOperands = simplifyOperands(innerOperands, innerOperations);
+
+                for (int i = 0; i < innerOperands.Count-1; i++)
+                {
+                    piece = innerOperands[i] + innerOperations[i];
+                }
+                piece = "(" + piece + innerOperations[innerOperands.Count-1] + ")";
+
+
+                if (operands.Substring(2 + distance, 1) == "^")
+                {
+                    power = simplifyPiece(operands.Substring(2 + distance));
+                }
+                piece = "(" + piece + ")" + power;
+                
+            }
+            else if (operands.Substring(0, 1) == "^")
+            {
+                //
+                // add a else for powers to simplify them down to one power
+                //
+                for (int i = 0; i < operands.Length; i++)
+                {
+                    if (distance + 3 * i < operands.Length)
+                    {
+                        if (operands.Substring(distance + 3 * i, 1) == "^")
+                        {
+                            distance = distance + lengthBetween(distance + 3 * i + 1, operands, "(", ")");
+                            if (i == 0)
+                            {
+                                piece = operands.Substring(3 * i + distance + 1, distance);
+                            }
+                            else
+                            {
+                                piece = piece + "*" + operands.Substring(3 * i + distance + 1, distance - i);
+                            }
+                        }
+                        else
+                        {
+                            i = operands.Length;
+                        }
+                    }
+                    else
+                    {
+                        i = operands.Length;
+                    }
+                }
+                piece = "^" + "(" + piece + ")";
+            }
+            
+
+            return piece;
+        }
+
+        //
+        // returns the derivative of function
+        //
+
+        private string takeDerivative(string function)
+        {
+            string solution = null, unknown;
+            //
+            // take derivative of function
+            //
+
+            for (int i = 0; i < function.Length; i++)
+            {
+                if (function.Substring(i, 1).All(char.IsLetter))
+                {
+                    unknown = function.Substring(0, i + 1);
+                }
+                else
+                {
+                    i = function.Length;
+                }
+            }
+            //
+            // check powers then check for product rule
+            //
+
+
+            return solution;
+        }
+
+        //
+        // returns the integral of a function and if it can be evaluated it will return the evaluated answer
+        //
+
+        private string integrate(string _a, string _b, string function)
+        {
+            string solution = null;
+
+            //
+            // take the integral of a function
+            //
+
+            //...
+
+            //
+            // evaluate integral
+            //
+
+            if (_a == "a")
+            {
+                //
+                // return function after integrated
+                //
+            }
+            else
+            {
+                //
+                // evaluate integral and return a number
+                //
+            }
+
+            return solution;
+        }
+
+        //
+        // not sure if this is actually necessary?
+        //
+
+        private string simplifyNumbers(string op)
+        {
+            string simplifiedNumber = null;
+            int distance = 0;
+            double operand1 = 0, operand2 = 0, answer = 0;
+            string operation;
+
+            if (op.Substring(0, 1) == "(")
+            {
+                distance = lengthBetween(0, op, "(", ")");
+                op = simplifyNumbers(op.Substring(1, distance)) + op.Substring(2 + distance);
+                simplifiedNumber = simplifyNumbers(op);
+            }
+            else if (op.Substring(0, 1).All(char.IsNumber) || op.Substring(0, 1).All(char.IsDigit))
+            {
+                for (int i = 1; i < op.Length; i++)
+                {
+                    if (op.Substring(0, i).All(char.IsNumber) || op.Substring(0, i).All(char.IsNumber))
+                    {
+                        operand1 = double.Parse(op.Substring(0, i));
+                    }
+                    else if (op.Substring(i, 1) == "^")
+                    {
+                        operation = "^";
+                        distance = lengthBetween(i + 1, op, "(", ")");
+                        operand2 = double.Parse(simplifyNumbers(op.Substring(i + 2, distance)));
+
+                        answer = doMath(operand1, operand2, operation);
+                        op = answer.ToString() + op.Substring(i + 3 + distance);
+                    }
+                    else if (op.Substring(i, 1) == "+" || op.Substring(i, 1) == "-" || op.Substring(i, 1) == "/" || op.Substring(i, 1) == "*")
+                    {
+                        operation = op.Substring(i, 1);
+
+                        operand2 = double.Parse(simplifyNumbers(op.Substring(i + 1, distance)));
+                        answer = doMath(operand1, operand2, operation);
+                        op = answer.ToString() + op.Substring(i + 1 + distance);
+                    }
+                    else if (op.Substring(i, 1) == "(")
+                    {
+                        distance = lengthBetween(i, op, "(", ")");
+                        operand2 = double.Parse(simplifyNumbers(op.Substring(i + 1, distance)));
+
+                        answer = doMath(operand1, operand2, "*");
+                        op = answer.ToString() + op.Substring(i + 2 + distance);
+                    }
+                    simplifiedNumber = simplifyNumbers(op);
+                }
+            }
+            else if (op.Substring(0, 1) == "")
+            {
+
+            }
+            else
+            {
+                simplifiedNumber = op;
+            }
+
+            return simplifiedNumber;
+        }
+
+        //
+        // returns the operation following an operand
+        //
 
         private string selectOperation(string text)
         {
@@ -989,7 +1428,7 @@ namespace C2_Calculator
             {
                 operation = "*";
             }
-            else if (text.Substring(0, 1) == "(" || text.Substring(0, 1) == "∫" || text.Substring(0, 1) == "ƒ" || text.Substring(0, 1) == "{")
+            else if (text.Substring(0, 1) == "(" || text.Substring(0, 1) == "∫" || text.Substring(0, 1) == "ƒ" || text.Substring(0, 1) == "{" || text.Substring(0, 1).All(char.IsLetter))
             {
                 // multiplication but not via "*"
                 operation = "";
@@ -999,7 +1438,7 @@ namespace C2_Calculator
         }
 
         //
-        // returns a piece of the problem
+        // returns a single operand of the problem
         //
 
         private string selectOperand(string text)
@@ -1049,18 +1488,51 @@ namespace C2_Calculator
                     }
                 }
             }
-            if (text.Substring(0, 1) == "ƒ")
+            else if (text.Substring(0, 1) == "ƒ")
             {
                 distance = lengthBetween(2, text, "[", "]");
-                if (text.Substring(4 + distance, 1) == "^")
+                if (4 + distance < text.Length)
+                {
+                    if (text.Substring(4 + distance, 1) == "^")
+                    {
+                        for (int p = 0; p < text.Length; p++)
+                        {
+                            if (4 + distance + (3 * p) < text.Length)
+                            {
+                                if (text.Substring(4 + distance + (3 * p), 1) == "^")
+                                {
+                                    distance = distance + lengthBetween(4 + distance + (3 * p) + 1, text, "(", ")");
+                                }
+                                else
+                                {
+                                    distance = distance + 3 * p;
+                                    p = text.Length;
+                                }
+                            }
+                            else
+                            {
+                                distance = distance + 3 * p;
+                                p = text.Length;
+                            }
+                        }
+                    }
+                }
+                
+
+
+                operand = text.Substring(0, distance + 4);
+            }
+            else if (text.Substring(0, 1) == "π" || text.Substring(0, 1) == "x" || text.Substring(0, 1) == "e")
+            {
+                if (text.Substring(1, 1) == "^")
                 {
                     for (int p = 0; p < text.Length; p++)
                     {
-                        if (4 + distance + (3 * p) < text.Length)
+                        if (1 + distance + (3 * p) < text.Length)
                         {
-                            if (text.Substring(4 + distance + (3 * p), 1) == "^")
+                            if (text.Substring(1 + distance + (3 * p), 1) == "^")
                             {
-                                distance = distance + lengthBetween(4 + distance + (3 * p) + 1, text, "(", ")");
+                                distance = distance + lengthBetween(1 + distance + (3 * p) + 1, text, "(", ")");
                             }
                             else
                             {
@@ -1076,8 +1548,8 @@ namespace C2_Calculator
                     }
                 }
 
-
-                operand = text.Substring(0, distance + 4);
+                operand = text.Substring(0, 1 + distance);
+                
             }
             else if (text.Substring(0, 1).All(char.IsLetter)) // Handler if there are letters in the text, such as ln, trig, or limits
             {
@@ -1109,38 +1581,32 @@ namespace C2_Calculator
                                 p = text.Length;
                             }
                         }
-                        if (unknown.Contains("x"))
-                        {
-                            operand = text.Substring(0, i + distance);
-                        }
-                        else if (unknown == "e")
-                        {
-                            operand = text.Substring(0, 1 + distance);
-                        }
-                        else if (unknown == "π")
-                        {
-                            operand = text.Substring(0, 1 + distance);
-                        }
-                        else // handles trig functions with powers
-                        {
-                            distance = distance + lengthBetween(i + distance, text, "(", ")");
-                            operand = text.Substring(0, i + distance + 2);
-                        }
+                        distance = distance + lengthBetween(i + distance, text, "(", ")");
+                        operand = text.Substring(0, i + distance + 2);
+                        
                         i = text.Length;
                     }
                     else if (text.Substring(i, 1) == "(")
                     {
                         vdis = lengthBetween(i, text, "(", ")");
 
-                        if (text.Substring(i + vdis + 2, 1) == "^")
+                        if (i + vdis + 2 < text.Length)
                         {
-                            for (int p = 0; p < text.Length; p++)
+                            if (text.Substring(i + vdis + 2, 1) == "^")
                             {
-                                if (i + vdis + distance + 2 + (3 * p) < text.Length)
+                                for (int p = 0; p < text.Length; p++)
                                 {
-                                    if (text.Substring(i + vdis + 2 + distance + (3 * p), 1) == "^")
+                                    if (i + vdis + distance + 2 + (3 * p) < text.Length)
                                     {
-                                        distance = distance + lengthBetween(i + vdis + 2 + distance + (3 * p) + 1, text, "(", ")");
+                                        if (text.Substring(i + vdis + 2 + distance + (3 * p), 1) == "^")
+                                        {
+                                            distance = distance + lengthBetween(i + vdis + 2 + distance + (3 * p) + 1, text, "(", ")");
+                                        }
+                                        else
+                                        {
+                                            distance = distance + 3 * p;
+                                            p = text.Length;
+                                        }
                                     }
                                     else
                                     {
@@ -1148,20 +1614,19 @@ namespace C2_Calculator
                                         p = text.Length;
                                     }
                                 }
-                                else
-                                {
-                                    distance = distance + 3 * p;
-                                    p = text.Length;
-                                }
-                            }
 
-                            operand = text.Substring(0, i + vdis + distance + 2);
-                            i = text.Length;
+                                operand = text.Substring(0, i + vdis + distance + 2);
+                                i = text.Length;
+                            }
+                            else
+                            {
+                                operand = text.Substring(0, i + distance + 2);
+                                i = text.Length;
+                            }
                         }
                         else
                         {
-                            operand = text.Substring(0, i + distance + 2);
-                            i = text.Length;
+                            operand = text.Substring(0, i + vdis + 2);
                         }
                     }
                     else if (text.Substring(i, 1) == "{") /////////////////////////////////////////////////////// handler for limits and logs
@@ -1225,9 +1690,6 @@ namespace C2_Calculator
                                 }
                             }
                         }
-                        
-
-
                         operand = text.Substring(0, i + distance + 2);
                         i = text.Length;
                     }
@@ -1241,17 +1703,25 @@ namespace C2_Calculator
             else if (text.Substring(0, 1) == "{") /////for roots
             {
                 distance = lengthBetween(0, text, "{", "}");
-                distance = distance + lengthBetween(distance + 3, text, "(", ")");
+                vdis = lengthBetween(distance + 3, text, "(", ")");
 
-                if (text.Substring(distance + 5, 1) == "^")
+                if (distance + vdis + 6 < text.Length)
                 {
-                    for (int p = 0; p < text.Length; p++)
+                    if (text.Substring(distance + vdis + 5, 1) == "^")
                     {
-                        if (5 + distance + (3 * p) < text.Length)
+                        for (int p = 0; p < text.Length; p++)
                         {
-                            if (text.Substring(5 + distance + (3 * p), 1) == "^")
+                            if (6 + distance + vdis + (3 * p) < text.Length)
                             {
-                                distance = distance + lengthBetween(5 + distance + (3 * p) + 1, text, "(", ")");
+                                if (text.Substring(5 + distance + vdis + (3 * p), 1) == "^")
+                                {
+                                    distance = distance + lengthBetween(5 + distance + (3 * p) + 1, text, "(", ")");
+                                }
+                                else
+                                {
+                                    distance = distance + 3 * p;
+                                    p = text.Length;
+                                }
                             }
                             else
                             {
@@ -1259,40 +1729,46 @@ namespace C2_Calculator
                                 p = text.Length;
                             }
                         }
-                        else
-                        {
-                            distance = distance + 3 * p;
-                            p = text.Length;
-                        }
                     }
+                    operand = text.Substring(0, distance + vdis + 5);
+                }
+                else
+                {
+                    operand = text.Substring(0, distance + vdis + 5);
                 }
 
-                operand = text.Substring(0, distance + 5);
 
             }
             else if (text.Substring(0, 1) == "(") /////for quantities
             {
                 distance = lengthBetween(0, text, "(", ")");
-                if (text.Substring(2 + distance, 1) == "^")
+                if (text.Substring(1, 1) == "{")
                 {
-                    for (int p = 0; p < text.Length; p++)
+                    distance++;
+                }
+                if (2 + distance < text.Length)
+                {
+                    if (text.Substring(2 + distance, 1) == "^")
                     {
-                        if (2 + distance + (3 * p) < text.Length)
+                        for (int p = 0; p < text.Length; p++)
                         {
-                            if (text.Substring(2 + distance + (3 * p), 1) == "^")
+                            if (2 + distance + (3 * p) < text.Length)
                             {
-                                distance = distance + lengthBetween(2 + distance + (3 * p) + 1, text, "(", ")");
+                                if (text.Substring(2 + distance + (3 * p), 1) == "^")
+                                {
+                                    distance = distance + lengthBetween(2 + distance + (3 * p) + 1, text, "(", ")");
+                                }
+                                else
+                                {
+                                    distance = distance + 3 * p;
+                                    p = text.Length;
+                                }
                             }
                             else
                             {
                                 distance = distance + 3 * p;
                                 p = text.Length;
                             }
-                        }
-                        else
-                        {
-                            distance = distance + 3 * p;
-                            p = text.Length;
                         }
                     }
                 }
@@ -1305,7 +1781,7 @@ namespace C2_Calculator
                 distance = distance + lengthBetween(3 + distance, text, "{", "}");
                 distance = distance + lengthBetween(5 + distance, text, "[", "]");
 
-                if (7 + distance <= text.Length)
+                if (7 + distance < text.Length)
                 {
                     if (text.Substring(7 + distance, 1) == "^")
                     {
@@ -1337,6 +1813,10 @@ namespace C2_Calculator
 
             return operand;
         }
+
+        //
+        // gets the length between two barriers ((), {}, [])
+        //
 
         private int lengthBetween(int pos, string text, string lRef, string rRef)
         {
@@ -1375,7 +1855,6 @@ namespace C2_Calculator
         // 4. definite integrals
         // 5. validation???
         //
-        // show solution is a seperate box with color shit
         //
 
 
